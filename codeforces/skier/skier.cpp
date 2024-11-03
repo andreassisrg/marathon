@@ -16,18 +16,30 @@ const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 int main() { _
 	ll t; cin >> t;
 	while (t--) {
-		pair<ll, ll> horizontal(0,0);
-		pair<ll, ll> vertical(0,0);
+		pair<ll, ll> coord_inicial = {0, 0}, coord_final = {0, 0};
+		set<pair<pair<ll, ll>, pair<ll, ll>>> caminhos;
+		pair<pair<ll, ll>, pair<ll, ll>> curr;
 		string s; cin >> s;
-		for (char c : s) {
-			if (c == 'N') vertical.f++;
-			else if (c == 'S') vertical.s++;
-			else if (c == 'W') horizontal.f++;
-			else if (c == 'E') horizontal.s++;
+		ll ans = 0;
+		for (char& c : s) {
+			if (c == 'E') coord_final.f++;
+			else if (c == 'W') coord_final.f--;
+			else if (c == 'N') coord_final.s++;
+			else coord_final.s--;
+
+			curr.f = coord_inicial; curr.s = coord_final;
+
+			if (caminhos.count(curr) == 0) {
+				ans += 5;
+				caminhos.insert(curr); swap(curr.s, curr.f); caminhos.insert(curr);
+			}
+			else {
+				ans++;
+			}
+
+			coord_inicial = coord_final;
 		}
-		int ans = 5*(max(horizontal.f, horizontal.s)) + min(horizontal.f, horizontal.s);
-		ans += 5*(max(vertical.f, vertical.s)) + min(vertical.f, vertical.s);
-		cout << ans << endl;
+		cout << ans << endl;	
 	}	
 
 	return 0;
